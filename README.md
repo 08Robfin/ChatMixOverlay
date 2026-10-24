@@ -77,12 +77,6 @@ Disable Start with Windows, choose **Exit** from the tray menu, then delete the 
 
 For a bug report, include your headset model, Windows/GG version, and relevant lines from **Open diagnostics folder**. Review the log before sharing it.
 
-## Memory use
-
-Version 1.0.1 stops compressing the .NET libraries inside the executable. Version 1.0.0 expanded those libraries into RAM. The download ZIP is still compressed, but the extracted executable is larger (about 162 MiB).
-
-A short development-machine sample measured about **21 MiB private memory before opening Settings**, and **91 MiB with Settings open**. The compressed build reached about 180 MiB after opening Settings. Showing the overlay and opening Settings load additional Windows UI resources, so actual usage varies. These are private-memory samples, not a promise about the working-set number in Task Manager.
-
 ## For developers
 
 Built with C# and WPF. Requires Windows and the .NET 9 SDK to build from source:
