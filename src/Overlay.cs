@@ -11,6 +11,8 @@ using Forms = System.Windows.Forms;
 namespace ChatMixOverlay;
 public sealed class Overlay : Window
 {
+    public event Action? Dismissed;
+    public bool IsOverlayVisible => visible;
     private readonly Settings settings;
     private readonly Border card;
     private readonly Ellipse thumb;
@@ -107,6 +109,14 @@ public sealed class Overlay : Window
         if (!rendering) { rendering = true; lastFrame = clock.Elapsed.TotalSeconds; CompositionTarget.Rendering += SmoothFrame; }
         timer.Stop(); timer.Interval = TimeSpan.FromSeconds(settings.Duration); timer.Start();
     }
+    // Follow the exact balance while already visible, but don't let wheel noise
+    // open the window or keep extending its dismissal timer.
+    public void UpdateBalance(double balance)
+    {
+        if (!visible) return;
+        target = Math.Clamp(balance * (settings.Reverse ? -1 : 1), -1, 1) * 67;
+        if (!rendering) { rendering = true; lastFrame = clock.Elapsed.TotalSeconds; CompositionTarget.Rendering += SmoothFrame; }
+    }
     private void SmoothFrame(object? sender, EventArgs e)
     {
         var now = clock.Elapsed.TotalSeconds;
@@ -129,7 +139,7 @@ public sealed class Overlay : Window
     {
         timer.Stop(); visible = false;
         var animation = new DoubleAnimation(0, TimeSpan.FromMilliseconds(100));
-        animation.Completed += (_, _) => { if (!visible) { StopRendering(); Hide(); } };
+        animation.Completed += (_, _) => { if (!visible) { StopRendering(); Hide(); Dismissed?.Invoke(); } };
         BeginAnimation(OpacityProperty, animation);
     }
     private void Position()

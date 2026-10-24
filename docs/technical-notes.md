@@ -63,3 +63,13 @@ A five-second idle sample during development recorded 0.0 CPU seconds, approxima
 These short observations are not a long-running leak or gaming benchmark. Actual sign-in launch, Windows Search indexing delay, and other Windows installations still need broader testing.
 
 References: [Microsoft single-file deployment documentation](https://learn.microsoft.com/en-us/dotnet/core/deploying/single-file/) explains that compressed bundled assemblies are decompressed into memory. [Microsoft startup documentation](https://support.microsoft.com/en-au/windows/experience/startup-boot/configure-startup-applications-in-windows) describes the per-user Startup folder and startup management.
+
+## 1.0.2 activation filter
+
+A head-only diagnostic capture showed temporary Sonar balance deviations up to 0.12, followed by a return close to center. Simple 0.025 and 0.05 distance thresholds were tried locally and were still too sensitive. The shipped filter therefore combines distance with settling time.
+
+BalanceChangeGate compares readings against the last accepted balance. Changes below 0.05 on the -1..+1 scale (2.5% of full travel) cannot activate the overlay. Changes from 0.05 to below 0.15 must settle for 0.8 seconds, tolerating one small step (0.012) during settling. Larger adjustments of 0.15 or more activate immediately. While already visible, movements past 0.05 extend its lifetime immediately, and smaller readings update the exact indicator without extending the timer.
+
+Slow intentional changes accumulate relative to the anchor. Returning to its dead zone cancels pending activation. Dismissal and reconnect reset the anchor to the actual balance. A single pending UI timer evaluates a settled change even when Sonar does not emit repeated identical readings; there is no extra API polling. Automated tests replay representative captured head-only samples and their pending timer deadlines, and cover settling delay, immediate turns, cumulative movement, both endpoints and resets.
+
+This observes balance only, not physical intent. A sustained accidental change can still be indistinguishable from a deliberate wheel adjustment. Short-term head-movement data is not published with the source.

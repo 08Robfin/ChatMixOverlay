@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.0.2 - 2026-10-24
+
+- Suppress accidental popups from tiny wheel fluctuations and temporary head-movement spikes.
+- Require small changes to settle for 0.8 seconds before showing the overlay; larger adjustments still appear immediately.
+- Keep the visible indicator synchronized with the real balance, without extending its display time for tiny fluctuations.
+- Preserve slow cumulative adjustments and reset the baseline on dismissal/reconnection.
+
+Small-change activation uses a 0.05 difference on the -1 to +1 Sonar scale (2.5% of the full bar). Changes of 0.15 or more respond immediately. Automated checks include replaying a captured head-movement sequence with timer deadlines, plus intentional movements, resets and boundaries. Results depend on the headset: a sustained balance change can still be indistinguishable from a deliberate wheel adjustment.
 ## 1.0.1 - 2026-10-24
 
 - Fix the right-click tray menu and restore access to Exit with a NotifyIcon-owned menu.

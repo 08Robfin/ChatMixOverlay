@@ -10,7 +10,7 @@ Turn the wheel and see your Game/Chat balance on screen. Stop adjusting it and t
 ## Download and run
 
 1. Open the [latest release](https://github.com/08Robfin/ChatMixOverlay/releases/latest).
-2. Download **ChatMixOverlay-1.0.1-win-x64.zip**. The files named “Source code” are for developers.
+2. Download **ChatMixOverlay-1.0.2-win-x64.zip**. The files named “Source code” are for developers.
 3. Right-click the downloaded ZIP, choose **Extract All**, and put the folder somewhere you want to keep it.
 4. Open **ChatMixOverlay.exe**. Its blue speech-bubble icon will appear in the system tray beside the clock. Check the hidden-icons arrow if you don't see it.
 5. Keep SteelSeries GG and Sonar running, then turn your ChatMix wheel.
@@ -25,7 +25,7 @@ After the first launch, search for **ChatMix Overlay** from Start to open Settin
 
 - **Left-click the tray icon** to open Settings.
 - **Right-click the tray icon** for Settings, Preview overlay, diagnostics, or Exit.
-- **Turn the ChatMix wheel** to show the balance. Game is on the left; Chat is on the right. The middle mark means equal balance.
+- **Turn the ChatMix wheel** slightly to show the balance. Tiny fluctuations are ignored to reduce accidental popups from head movement. Small adjustments appear after settling for about 0.8 seconds; larger turns appear immediately. Game is on the left; Chat is on the right. The middle mark means equal balance.
 - **Stop adjusting** and the overlay fades away after 1.5 seconds by default.
 
 The overlay is click-through and doesn't take keyboard focus. It shows the balance without percentages or numbers. It also checks Sonar's software balance, so changes through Sonar can appear too, if that control is available in your current headset mode.
