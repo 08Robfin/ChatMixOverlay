@@ -23,10 +23,8 @@ public sealed class Settings
     }
     public void Save()
     {
+        WindowsIntegration.SetStartup(Startup);
         Directory.CreateDirectory(Path.GetDirectoryName(FilePath)!);
         File.WriteAllText(FilePath, JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true }));
-        using var key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
-        if (Startup) key.SetValue("ChatMixOverlay", "\"" + Environment.ProcessPath + "\"");
-        else key.DeleteValue("ChatMixOverlay", false);
     }
 }

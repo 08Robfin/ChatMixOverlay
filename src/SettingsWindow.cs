@@ -55,6 +55,13 @@ public sealed class SettingsWindow : Window
         timing.Children.Add(durationLabel); timing.Children.Add(duration); Card(timing);
         var reverse = new CheckBox { Content = "Reverse Game and Chat direction", IsChecked = settings.Reverse, MinHeight = 36, VerticalContentAlignment = VerticalAlignment.Center };
         var startup = new CheckBox { Content = "Start with Windows", IsChecked = settings.Startup, MinHeight = 36, VerticalContentAlignment = VerticalAlignment.Center };
+        startup.ToolTip = "Applies immediately. Windows can also disable startup in Task Manager.";
+        startup.Click += (_, _) =>
+        {
+            var previous = settings.Startup;
+            try { settings.Startup = startup.IsChecked == true; settings.Save(); }
+            catch (Exception ex) { settings.Startup = previous; startup.IsChecked = previous; MessageBox.Show(this, ex.Message, "Could not update Windows startup"); }
+        };
         var options = new StackPanel(); options.Children.Add(reverse); options.Children.Add(startup); Card(options);
         panel.Children.Add(new TextBlock { Text = status(), TextWrapping = TextWrapping.Wrap, Opacity = .65, FontSize = 12, Margin = new Thickness(0, 6, 0, 4), MaxHeight = 32 });
         panel.Children.Add(new TextBlock { Text = "Sonar handles your audio. This app only displays the balance.", Opacity = .55, FontSize = 11, Margin = new Thickness(0, 0, 0, 20) });

@@ -7,7 +7,7 @@ $releaseVersion = [string]$projectXml.Project.PropertyGroup.Version
 $outputDirectory = Join-Path $projectRoot 'dist/portable'
 $archivePath = Join-Path $projectRoot "dist/ChatMixOverlay-$releaseVersion-win-x64.zip"
 
-dotnet publish $projectPath -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:UseSharedCompilation=false -p:DebugType=None -p:DebugSymbols=false -o $outputDirectory
+dotnet publish $projectPath -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=false -p:UseSharedCompilation=false -p:DebugType=None -p:DebugSymbols=false -o $outputDirectory
 if ($LASTEXITCODE -ne 0) { throw 'Publish failed. Exit the running overlay before rebuilding its executable.' }
 Copy-Item -LiteralPath (Join-Path $projectRoot 'README.md') -Destination $outputDirectory
 Copy-Item -LiteralPath (Join-Path $projectRoot 'CHANGELOG.md') -Destination $outputDirectory

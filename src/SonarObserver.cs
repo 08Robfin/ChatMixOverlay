@@ -12,6 +12,7 @@ public sealed class SonarObserver : IDisposable
     private readonly CancellationTokenSource stop = new();
     private readonly object readingGate = new();
     private long socketRevision;
+    private double? lastBalance;
     public event Action<double, string, string>? Reading;
     public event Action<string>? Status;
     public SonarObserver()
@@ -55,8 +56,10 @@ public sealed class SonarObserver : IDisposable
         lock (readingGate)
         {
             if (source == "wheel/socket") socketRevision++;
-            if (TryBalance(data, out var value, out var state)) Reading?.Invoke(value, state, source);
-            else throw new InvalidDataException("Unrecognized ChatMix payload.");
+            if (!TryBalance(data, out var value, out var state)) throw new InvalidDataException("Unrecognized ChatMix payload.");
+            if (source != "baseline" && lastBalance.HasValue && Math.Abs(lastBalance.Value - value) <= .001) return;
+            lastBalance = value;
+            Reading?.Invoke(value, state, source);
         }
     }
     public async Task RunAsync()
@@ -119,7 +122,7 @@ public sealed class SonarObserver : IDisposable
                     if (!result.EndOfMessage) continue;
                     if (result.MessageType == WebSocketMessageType.Text)
                     {
-                        using var doc = JsonDocument.Parse(message.ToArray());
+                        using var doc = JsonDocument.Parse(message.GetBuffer().AsMemory(0, (int)message.Length));
                         var root = doc.RootElement;
                         if (root.TryGetProperty("event", out var e) && e.GetString() == "EVENT_SONAR_CHATMIX_DATA" && root.TryGetProperty("data", out var data)) Emit(data, "wheel/socket");
                     }

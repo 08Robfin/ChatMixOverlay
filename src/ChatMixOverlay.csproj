@@ -9,14 +9,17 @@
     <NoWarn>$(NoWarn);WPF0001</NoWarn>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <AssemblyName>ChatMixOverlay</AssemblyName>
+    <AssemblyTitle>ChatMix Overlay</AssemblyTitle>
+    <Company>08Robfin</Company>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <Version>1.0.0</Version>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.1</Version>
+    <AssemblyVersion>1.0.1.0</AssemblyVersion>
+    <FileVersion>1.0.1.0</FileVersion>
     <Product>ChatMix Overlay</Product>
     <Description>A read-only SteelSeries Sonar ChatMix overlay for Windows 11.</Description>
   </PropertyGroup>
   <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.GC.ConserveMemory" Value="7" />
     <EmbeddedResource Include="app.ico" />
     <Using Remove="System.Drawing" />
     <Using Remove="System.Windows.Forms" />

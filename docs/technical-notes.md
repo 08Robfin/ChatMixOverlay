@@ -50,3 +50,16 @@ These interfaces are undocumented by SteelSeries and may change. On an incompati
 ## Performance and acceptance limits
 
 A five-second idle sample during development recorded 0.0 CPU seconds, approximately 126 MB private memory and 236 MB working set. This is not a gaming benchmark. WPF and the bundled runtime have a material baseline memory cost. Mixed-DPI transitions, sign-in startup and per-game behavior need hands-on testing. Light/dark layouts were rendered and inspected, and live wheel events were verified on the development machine with an Arctis Nova 7.
+
+## 1.0.1 desktop integration and memory
+
+- Start search: one stable `ChatMix Overlay.lnk` in the current-user Programs directory, using `--settings`. Target and arguments are compared before saving, so unchanged launches do not rewrite it.
+- Startup: a separate stable shortcut in the current-user Startup folder, using `--background`. The checkbox applies immediately. The legacy `HKCU\...\Run\ChatMixOverlay` entry is removed after migration, avoiding a second autostart. Windows-level startup disabling is deliberately not overwritten. A live check returned one `Win32_StartupCommand` with name `ChatMix Overlay`, location `Startup`.
+- Single instance: a current-user-only named pipe forwards Settings/Exit requests to the running instance. Repeated background startup does not open Settings.
+- Tray menu: a NotifyIcon-owned ContextMenuStrip replaces the broken hidden-window WPF popup. The user confirmed that right-click displays the menu. Graceful shutdown was tested through the same Application.Shutdown action used by Exit.
+- Memory: a matched local comparison of compressed/uncompressed 1.0.1 builds recorded about 180/91 MiB private memory after opening Settings, and 100/21 MiB beforehand. Managed live memory was about 8 MiB with Settings open; the remainder includes runtime, native UI, framework code and other allocations. No forced working-set trimming or periodic full GC is used. The executable grows to about 162 MiB, while the distribution ZIP remains compressed.
+- Additional reductions: lazy overlay creation, deduplication before UI dispatch, parsing socket buffers directly, and GC memory-conservation mode.
+
+These short observations are not a long-running leak or gaming benchmark. Actual sign-in launch, Windows Search indexing delay, and other Windows installations still need broader testing.
+
+References: [Microsoft single-file deployment documentation](https://learn.microsoft.com/en-us/dotnet/core/deploying/single-file/) explains that compressed bundled assemblies are decompressed into memory. [Microsoft startup documentation](https://support.microsoft.com/en-au/windows/experience/startup-boot/configure-startup-applications-in-windows) describes the per-user Startup folder and startup management.

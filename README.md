@@ -10,7 +10,7 @@ Turn the wheel and see your Game/Chat balance on screen. Stop adjusting it and t
 ## Download and run
 
 1. Open the [latest release](https://github.com/08Robfin/ChatMixOverlay/releases/latest).
-2. Download **ChatMixOverlay-1.0.0-win-x64.zip**. The files named “Source code” are for developers.
+2. Download **ChatMixOverlay-1.0.1-win-x64.zip**. The files named “Source code” are for developers.
 3. Right-click the downloaded ZIP, choose **Extract All**, and put the folder somewhere you want to keep it.
 4. Open **ChatMixOverlay.exe**. Its blue speech-bubble icon will appear in the system tray beside the clock. Check the hidden-icons arrow if you don't see it.
 5. Keep SteelSeries GG and Sonar running, then turn your ChatMix wheel.
@@ -18,6 +18,8 @@ Turn the wheel and see your Game/Chat balance on screen. Stop adjusting it and t
 There is no installer, and you don't need to install .NET separately. The app is unsigned, so Windows may show an unrecognized-app warning. Only run a copy you trust.
 
 **Requirements:** Windows 11 on an x64 PC, SteelSeries GG with Sonar enabled, and a headset/setup that reports ChatMix to Sonar. Physical wheel detection has been tested with an Arctis Nova 7; other headset models haven't been verified.
+
+After the first launch, search for **ChatMix Overlay** from Start to open Settings. The app creates one Start menu shortcut and updates its target if the executable moves; it does not add a new shortcut on every launch.
 
 ## Using the app
 
@@ -37,7 +39,7 @@ The overlay is click-through and doesn't take keyboard focus. It shows the balan
 | Monitor | Your primary monitor, a specific monitor, or the monitor containing your mouse pointer. |
 | Display duration | How long the overlay stays visible after an adjustment. |
 | Reverse direction | Swap the direction if the indicator moves opposite to your headset. |
-| Start with Windows | Start the app automatically when you sign in. Off by default. |
+| Start with Windows | Start the app automatically when you sign in. Applies immediately; off by default. |
 
 Use **Preview overlay** to see an example, then **Save** to keep your settings. Preview uses simulated values and doesn't change your audio.
 
@@ -53,7 +55,7 @@ Your preferences and local diagnostics are stored in:
 %LOCALAPPDATA%\ChatMixOverlay
 ```
 
-Enabling Start with Windows adds an entry for this app to your Windows startup settings. Keep the executable in the same location after enabling it. If you move it, disable startup first and enable it again from its new location.
+Enabling Start with Windows immediately creates one shortcut in the Windows Startup folder (`shell:startup`), so Windows can list it under Startup apps in Settings or Task Manager. Reopen that list if it was already open. Windows can disable this entry separately; the app does not override a Windows-level disable. When launched from a new location, the app updates its existing shortcuts. The old Run registry entry is migrated rather than registering both startup mechanisms.
 
 ## Troubleshooting
 
@@ -71,9 +73,15 @@ Try borderless windowed mode. Exclusive fullscreen and games that block external
 
 **I want to remove the app**
 
-Disable Start with Windows, choose **Exit** from the tray menu, then delete the extracted folder. You can also delete the settings folder shown above if you want to remove your preferences and logs.
+Disable Start with Windows, choose **Exit** from the tray menu, then delete the extracted folder. Delete ChatMix Overlay from the Start menu as well: right-click its search result and choose Open file location to find the shortcut. You can also delete the settings folder shown above if you want to remove preferences and logs.
 
 For a bug report, include your headset model, Windows/GG version, and relevant lines from **Open diagnostics folder**. Review the log before sharing it.
+
+## Memory use
+
+Version 1.0.1 stops compressing the .NET libraries inside the executable. Version 1.0.0 expanded those libraries into RAM. The download ZIP is still compressed, but the extracted executable is larger (about 162 MiB).
+
+A short development-machine sample measured about **21 MiB private memory before opening Settings**, and **91 MiB with Settings open**. The compressed build reached about 180 MiB after opening Settings. Showing the overlay and opening Settings load additional Windows UI resources, so actual usage varies. These are private-memory samples, not a promise about the working-set number in Task Manager.
 
 ## For developers
 
