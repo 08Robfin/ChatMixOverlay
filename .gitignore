@@ -1,0 +1,9 @@
+bin/
+obj/
+dist/
+.vs/
+.idea/
+*.user
+*.suo
+self-test.txt
+preview-*.png
