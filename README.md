@@ -96,3 +96,7 @@ Get-Content ./dist/portable/self-test.txt
 See [technical notes](docs/technical-notes.md) for Sonar discovery, the read-only API, hardware verification, performance observations, and limitations. `tools/Observe-ChatMix.ps1` is an optional read-only diagnostic tool for PowerShell 7.
 
 This is an unofficial project and is not affiliated with SteelSeries or Microsoft.
+
+## License
+
+Licensed under the [MIT License](LICENSE).
